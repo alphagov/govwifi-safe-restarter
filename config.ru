@@ -11,4 +11,5 @@ if %w[production staging].include?(RACK_ENV)
 end
 
 require './app'
+require './lib/use_case/safe_restart'
 run App
