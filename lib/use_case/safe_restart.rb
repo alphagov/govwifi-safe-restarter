@@ -5,7 +5,11 @@ module UseCase
     end
 
     def safe_restart
-      ecs_gateway.list_clusters
+      cluster_arns = ecs_gateway.list_clusters
+
+      cluster_arns.each do |arn|
+        tasks = ecs_gateway.list_tasks(cluster: arn)
+      end
 
       { status: :success, errors: [] }
     end

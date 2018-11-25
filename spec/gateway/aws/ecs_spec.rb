@@ -27,6 +27,7 @@ describe Gateway::Aws::Ecs do
         }
       }
     end
+
     it 'returns tasks belonging to the clusters' do
       expect(subject.list_tasks(cluster: 'some-cluster')).to eq(
         ['arn:aws:ecs:eu-west-2:1234:task/xxxylyy3-bead-4d17-b6c2-f9bb0fc97c67']
