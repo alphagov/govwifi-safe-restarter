@@ -42,6 +42,9 @@ describe UseCase::SafeRestart do
   let(:health_checker) { EventuallyHealthyHealthCheckFake.new }
   let(:delayer) { FakeDelayer.new }
   let(:notifier) { double(notify: nil) }
+  let(:some_cluster_arn) { 'arn:aws:ecs:eu-west-2:123:cluster/some-cluster' }
+  let(:cluster_finder) { double(execute: [some_cluster_arn]) }
+  let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
 
   before do
     delayer.health_check_retry_limit = 5
@@ -49,6 +52,7 @@ describe UseCase::SafeRestart do
 
   subject do
     described_class.new(
+      cluster_finder: cluster_finder,
       ecs_gateway: ecs_gateway,
       health_checker: health_checker,
       delayer: delayer,
@@ -58,21 +62,19 @@ describe UseCase::SafeRestart do
 
   describe 'Safe Restart success' do
     context 'Clusters' do
-      let(:ecs_gateway) { double(list_clusters: []) }
 
-      it 'calls list_clusters on the ECS gateway' do
+      it 'calls execute on the environment cluster finder' do
         subject.safe_restart
-        expect(ecs_gateway).to have_received(:list_clusters)
+        expect(cluster_finder).to have_received(:execute)
       end
 
       context 'Tasks' do
-        let(:some_cluster_arn) { 'arn:aws:ecs:eu-west-2:123:cluster/some-cluster' }
         let(:some_task_arn1) { 'arn:aws:ecs:eu-west-2:123:task/fe2c820a-98d9' }
         let(:some_task_arn2) { 'arn:aws:ecs:eu-west-2:123:task/abcs903s-930a' }
         let(:some_task_arn3) { 'arn:aws:ecs:eu-west-2:123:task/abcs390s-abcd' }
+
         let(:ecs_gateway) do
           double(
-            list_clusters: [some_cluster_arn],
             list_tasks: [some_task_arn1, some_task_arn2, some_task_arn3],
             stop_task: true,
           )

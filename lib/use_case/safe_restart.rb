@@ -1,10 +1,11 @@
 module UseCase
   class SafeRestart
-    def initialize(ecs_gateway:, health_checker:, delayer:, notifier:)
+    def initialize(cluster_finder:, ecs_gateway:, health_checker:, delayer:, notifier:)
       @ecs_gateway = ecs_gateway
       @health_checker = health_checker
       @delayer = delayer
       @notifier = notifier
+      @cluster_finder = cluster_finder
     end
 
     def safe_restart
@@ -39,7 +40,7 @@ module UseCase
     end
 
     def cluster_arns
-      ecs_gateway.list_clusters
+      cluster_finder.execute
     end
 
     def task_arns(cluster)
@@ -68,6 +69,6 @@ module UseCase
       end
     end
 
-    attr_reader :ecs_gateway, :health_checker, :delayer, :notifier
+    attr_reader :ecs_gateway, :health_checker, :delayer, :notifier, :cluster_finder
   end
 end
