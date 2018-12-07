@@ -1,32 +1,73 @@
 module UseCase
   class SafeRestart
-    def initialize(ecs_gateway:, health_checker:)
+    def initialize(ecs_gateway:, health_checker:, delayer:, notifier:)
       @ecs_gateway = ecs_gateway
       @health_checker = health_checker
+      @delayer = delayer
+      @notifier = notifier
     end
 
     def safe_restart
-      cluster_arns = ecs_gateway.list_clusters
-
-      cluster_arns.each do |cluster_arn|
-        task_arns = ecs_gateway.list_tasks(cluster: cluster_arn)
-
-        task_arns.each do |task_arn|
-          if health_checker.healthy?(task_arn)
-            ecs_gateway.stop_task(
-              cluster: cluster_arn,
-              task: task_arn,
-              reason: 'AUTOMATED RESTART'
-            )
-          end
-        end
-      end
-
-      { status: :success, errors: [] }
+      cluster_arns.each { |cluster| rolling_restart_cluster(cluster) }
     end
 
     private
 
-    attr_reader :ecs_gateway, :health_checker
+    def rolling_restart_cluster(cluster_arn)
+      tasks = task_arns(cluster_arn)
+      canary, *rest = *tasks
+      stop_tasks(tasks, [canary], cluster_arn)
+
+      live_canary = newest_task(cluster_arn, tasks)
+
+      until health_checker.healthy?(live_canary)
+        return if :timed_out == wait_for_task_with_timeout(tasks, cluster_arn)
+      end
+
+      stop_tasks(tasks, rest, cluster_arn)
+    end
+
+    def stop_tasks(all_tasks, tasks, cluster_arn)
+      tasks.each do |task_arn|
+        stop_task(cluster_arn, task_arn)
+
+        until all_tasks.count == task_arns(cluster_arn).count
+          return if :timed_out == wait_for_task_with_timeout(all_tasks, cluster_arn)
+        end
+      end
+
+    end
+
+    def cluster_arns
+      ecs_gateway.list_clusters
+    end
+
+    def task_arns(cluster)
+      ecs_gateway.list_tasks(cluster: cluster)
+    end
+
+    def stop_task(cluster, task)
+      ecs_gateway.stop_task(
+        cluster: cluster,
+        task: task,
+        reason: 'AUTOMATED RESTART'
+      )
+    end
+
+    def newest_task(cluster, tasks)
+      task_arns(cluster) - tasks
+    end
+
+    def wait_for_task_with_timeout(tasks, cluster_arn)
+      delayer.delay
+      delayer.increment_retries
+
+      if delayer.max_retries_reached?
+        notifier.notify
+        return :timed_out
+      end
+    end
+
+    attr_reader :ecs_gateway, :health_checker, :delayer, :notifier
   end
 end
