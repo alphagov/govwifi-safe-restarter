@@ -1,5 +1,8 @@
+require 'logger'
+
 require 'require_all'
 require_all 'lib'
+logger = Logger.new(STDOUT)
 
 task :safe_restart, :environment do |_, args|
   unless %w(staging production).include?(args['environment'])
@@ -14,7 +17,6 @@ task :safe_restart, :environment do |_, args|
   cluster_finder = UseCase::FindClustersForEnvironment.new(gateway: ecs_gateway, environment: environment)
   health_checker = UseCase::HealthCheck.new(route53_gateway: route53_gateway)
   delayer = Gateway::Delayer.new
-  logger = Logger::INFO
 
   UseCase::SafeRestart.new(
     cluster_finder: cluster_finder,

@@ -16,23 +16,24 @@ module UseCase
 
   private
 
-    def rolling_restart_cluster(cluster_arn)
-      tasks = task_arns(cluster_arn)
+    def rolling_restart_cluster(cluster)
+      tasks = tasks(cluster)
       canary, *rest = *tasks
       logger.info("Found Canary: #{canary}")
-      restart_and_wait_for(canary, tasks, cluster_arn)
+      restart_and_wait_for(canary, tasks, cluster)
       wait_or_timeout until health_checker.healthy?
 
-      rest.each { |task| restart_and_wait_for(task, tasks, cluster_arn) }
+      rest.each { |task| restart_and_wait_for(task, tasks, cluster) }
     end
 
-    def restart_and_wait_for(task, original_tasks, cluster_arn)
+    def restart_and_wait_for(task, original_tasks, cluster)
       logger.info("Stopping: #{task}")
-      stop_task(cluster_arn, task)
-      wait_or_timeout until original_tasks.count == task_arns(cluster_arn).count
+      stop_task(cluster, task)
+      wait_or_timeout until original_tasks.count == tasks(cluster).count
+      logger.info("New Task has come back up: #{task}")
     end
 
-    def task_arns(cluster)
+    def tasks(cluster)
       ecs_gateway.list_tasks(cluster: cluster)
     end
 
