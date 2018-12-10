@@ -14,14 +14,12 @@ task :safe_restart, :environment do |_, args|
   cluster_finder = UseCase::FindClustersForEnvironment.new(gateway: ecs_gateway, environment: environment)
   health_checker = UseCase::HealthCheck.new(route53_gateway: route53_gateway)
   delayer = Gateway::Delayer.new
-  notifier = Gateway::NoopNotifier.new
 
   UseCase::SafeRestart.new(
     cluster_finder: cluster_finder,
     ecs_gateway: ecs_gateway,
     health_checker: health_checker,
-    delayer: delayer,
-    notifier: notifier
+    delayer: delayer
   ).execute
 
   cluster_finder.execute

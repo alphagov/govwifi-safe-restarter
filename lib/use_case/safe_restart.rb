@@ -1,10 +1,9 @@
 module UseCase
   class SafeRestart
-    def initialize(cluster_finder:, ecs_gateway:, health_checker:, delayer:, notifier:)
+    def initialize(cluster_finder:, ecs_gateway:, health_checker:, delayer:)
       @ecs_gateway = ecs_gateway
       @health_checker = health_checker
       @delayer = delayer
-      @notifier = notifier
       @cluster_finder = cluster_finder
     end
 
@@ -70,11 +69,10 @@ module UseCase
       delayer.increment_retries
 
       if delayer.max_retries_reached?
-        notifier.notify
-        return :timed_out
+        :timed_out
       end
     end
 
-    attr_reader :ecs_gateway, :health_checker, :delayer, :notifier, :cluster_finder
+    attr_reader :ecs_gateway, :health_checker, :delayer, :cluster_finder
   end
 end

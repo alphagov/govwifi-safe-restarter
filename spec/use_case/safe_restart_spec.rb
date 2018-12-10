@@ -41,7 +41,6 @@ end
 describe UseCase::SafeRestart do
   let(:health_checker) { EventuallyHealthyHealthCheckFake.new }
   let(:delayer) { FakeDelayer.new }
-  let(:notifier) { double(notify: nil) }
   let(:some_cluster_arn) { 'arn:aws:ecs:eu-west-2:123:cluster/some-cluster' }
   let(:cluster_finder) { double(execute: [some_cluster_arn]) }
   let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
@@ -56,7 +55,6 @@ describe UseCase::SafeRestart do
       ecs_gateway: ecs_gateway,
       health_checker: health_checker,
       delayer: delayer,
-      notifier: notifier
     )
   end
 
@@ -76,7 +74,7 @@ describe UseCase::SafeRestart do
         let(:ecs_gateway) do
           double(
             list_tasks: [some_task_arn1, some_task_arn2, some_task_arn3],
-            stop_task: true,
+            stop_task: true
           )
         end
 
@@ -144,10 +142,6 @@ describe UseCase::SafeRestart do
 
             it 'retries' do
               expect(delayer.max_retries_reached?).to eq(true)
-            end
-
-            it 'sends a notification' do
-              expect(notifier).to have_received(:notify)
             end
           end
         end
