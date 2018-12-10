@@ -5,17 +5,17 @@ module Gateway
     end
 
     def delay
-      p "delaying for #{WAIT_TIME} seconds"
+      logger.info "delaying for #{WAIT_TIME} seconds"
       sleep(WAIT_TIME)
     end
 
     def increment_retries
       @retries += 1
-      p "retries increased to #{@retries}"
+      logger.info "retries increased to #{@retries}"
     end
 
     def max_retries_reached?
-      p "checking if max retries reached #{@max_retries_reached}"
+      logger.info "checking if max retries reached #{@max_retries_reached}"
       @retries >= MAX_RETRIES
     end
 

@@ -12,6 +12,7 @@ describe UseCase::FindClustersForEnvironment do
 
   context 'given Staging' do
     let(:environment) { 'staging' }
+
     it 'finds only staging clusters' do
       expect(subject.execute).to eq(['arn:aws:ecs:eu-west-2:abc123:cluster/staging-frontend-cluster'])
     end
@@ -19,6 +20,7 @@ describe UseCase::FindClustersForEnvironment do
 
   context 'given Production' do
     let(:environment) { 'wifi' }
+
     it 'finds only production clusters' do
       expect(subject.execute).to eq(['arn:aws:ecs:eu-west-2:abc123:cluster/wifi-frontend-cluster'])
     end

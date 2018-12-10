@@ -44,13 +44,15 @@ describe UseCase::SafeRestart do
   let(:cluster_finder) { double(execute: [some_cluster_arn]) }
   let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
   let(:restart_reason) { 'AUTOMATED RESTART' }
+  let(:logger) { Logger::INFO }
 
   subject do
     described_class.new(
       cluster_finder: cluster_finder,
       ecs_gateway: ecs_gateway,
       health_checker: health_checker,
-      delayer: delayer
+      delayer: delayer,
+      logger: logger
     )
   end
 
