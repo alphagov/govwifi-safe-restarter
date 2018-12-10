@@ -8,6 +8,7 @@ gem 'puma'
 gem 'require_all'
 gem 'sinatra'
 gem 'sinatra-contrib'
+gem 'rake'
 
 group :test do
   gem 'govuk-lint'

@@ -103,6 +103,7 @@ DEPENDENCIES
   pry
   puma
   rack-test
+  rake
   require_all
   rspec
   sinatra
