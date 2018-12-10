@@ -9,6 +9,8 @@ TODO
   - Disable this app so it doesn't restart again
   - Do we need the aws namespace in the gateways?
   - Jenkins
+  - Linting
+  - Sentry
 
 ```ruby
 bundle exec rake safe_restart[staging]
