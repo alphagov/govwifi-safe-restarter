@@ -11,6 +11,7 @@ TODO
   - Jenkins
   - Linting
   - Sentry
+  - This doesn't have to be a web app, delete the route
 
 ```ruby
 bundle exec rake safe_restart[staging]
