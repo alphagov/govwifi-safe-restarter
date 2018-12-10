@@ -64,7 +64,7 @@ describe UseCase::SafeRestart do
     context 'Clusters' do
 
       it 'calls execute on the environment cluster finder' do
-        subject.safe_restart
+        subject.execute
         expect(cluster_finder).to have_received(:execute)
       end
 
@@ -81,7 +81,7 @@ describe UseCase::SafeRestart do
         end
 
         before do
-          subject.safe_restart
+          subject.execute
         end
 
         it 'calls list_tasks on the ECS gateway' do

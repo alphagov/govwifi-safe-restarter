@@ -8,8 +8,8 @@ module UseCase
       @cluster_finder = cluster_finder
     end
 
-    def safe_restart
-      cluster_arns.each { |cluster| rolling_restart_cluster(cluster) }
+    def execute
+      cluster_finder.execute.each { |cluster| rolling_restart_cluster(cluster) }
     end
 
     private
@@ -18,7 +18,6 @@ module UseCase
       tasks = task_arns(cluster_arn)
       canary, *rest = *tasks
       stop_tasks(tasks, [canary], cluster_arn)
-
       live_canary = newest_task(cluster_arn, tasks)
 
       until health_checker.healthy?(live_canary)
@@ -36,11 +35,6 @@ module UseCase
           return if :timed_out == wait_for_task_with_timeout(all_tasks, cluster_arn)
         end
       end
-
-    end
-
-    def cluster_arns
-      cluster_finder.execute
     end
 
     def task_arns(cluster)
@@ -48,11 +42,7 @@ module UseCase
     end
 
     def stop_task(cluster, task)
-      ecs_gateway.stop_task(
-        cluster: cluster,
-        task: task,
-        reason: 'AUTOMATED RESTART'
-      )
+      ecs_gateway.stop_task(cluster: cluster, task: task, reason: 'AUTOMATED RESTART')
     end
 
     def newest_task(cluster, tasks)
