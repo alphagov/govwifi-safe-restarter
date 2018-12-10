@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 ruby File.read('.ruby-version').chomp
 
 gem 'aws-sdk-ecs'
-gem 'aws-sdk-cloudwatchlogs'
+gem 'aws-sdk-route53'
 gem 'pry'
 gem 'puma'
 gem 'require_all'
