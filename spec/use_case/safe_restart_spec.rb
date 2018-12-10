@@ -1,6 +1,6 @@
 require_relative '../../lib/use_case/safe_restart'
 
-class FakeDelayer
+class DelayerDummy
   attr_accessor :health_check_retry_limit
 
   def initialize
@@ -18,7 +18,7 @@ class FakeDelayer
   end
 end
 
-class EventuallyHealthyHealthCheckFake
+class EventuallyHealthyHealthCheckDummy
   def initialize
     @call_count = 0
   end
@@ -30,7 +30,7 @@ class EventuallyHealthyHealthCheckFake
   end
 end
 
-class NeverHealthyFake
+class NeverHealthyDummy
   def initialize; end
 
   def healthy?
@@ -39,28 +39,28 @@ class NeverHealthyFake
 end
 
 describe UseCase::SafeRestart do
-  let(:health_checker) { EventuallyHealthyHealthCheckFake.new }
-  let(:delayer) { FakeDelayer.new }
+  let(:health_checker) { EventuallyHealthyHealthCheckDummy.new }
+  let(:delayer) { DelayerDummy.new }
   let(:some_cluster_arn) { 'arn:aws:ecs:eu-west-2:123:cluster/some-cluster' }
   let(:cluster_finder) { double(execute: [some_cluster_arn]) }
   let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
-
-  before do
-    delayer.health_check_retry_limit = 5
-  end
+  let(:restart_reason) { 'AUTOMATED RESTART' }
 
   subject do
     described_class.new(
       cluster_finder: cluster_finder,
       ecs_gateway: ecs_gateway,
       health_checker: health_checker,
-      delayer: delayer,
+      delayer: delayer
     )
   end
 
   describe 'Safe Restart success' do
-    context 'Clusters' do
+    before do
+      delayer.health_check_retry_limit = 5
+    end
 
+    context 'Clusters' do
       it 'calls execute on the environment cluster finder' do
         subject.execute
         expect(cluster_finder).to have_received(:execute)
@@ -72,17 +72,11 @@ describe UseCase::SafeRestart do
         let(:some_task_arn3) { 'arn:aws:ecs:eu-west-2:123:task/abcs390s-abcd' }
 
         let(:ecs_gateway) do
-          double(
-            list_tasks: [some_task_arn1, some_task_arn2, some_task_arn3],
-            stop_task: true
-          )
-        end
-
-        before do
-          subject.execute
+          double(list_tasks: [some_task_arn1, some_task_arn2, some_task_arn3], stop_task: true)
         end
 
         it 'calls list_tasks on the ECS gateway' do
+          subject.execute
           expect(ecs_gateway).to have_received(:list_tasks).with(cluster: some_cluster_arn).at_least(:once)
         end
 
@@ -90,13 +84,14 @@ describe UseCase::SafeRestart do
           context 'Healthy' do
             before do
               allow(ecs_gateway).to receive(:stop_task)
+              subject.execute
             end
 
             it 'stops the first task - canary' do
               expect(ecs_gateway).to have_received(:stop_task).with(
                 cluster: some_cluster_arn,
                 task: some_task_arn1,
-                reason: 'AUTOMATED RESTART'
+                reason: restart_reason
               )
             end
 
@@ -104,7 +99,7 @@ describe UseCase::SafeRestart do
               expect(ecs_gateway).to have_received(:stop_task).with(
                 cluster: some_cluster_arn,
                 task: some_task_arn2,
-                reason: 'AUTOMATED RESTART'
+                reason: restart_reason
               ).exactly(:once)
             end
 
@@ -112,36 +107,39 @@ describe UseCase::SafeRestart do
               expect(ecs_gateway).to have_received(:stop_task).with(
                 cluster: some_cluster_arn,
                 task: some_task_arn3,
-                reason: 'AUTOMATED RESTART'
+                reason: restart_reason
               ).exactly(:once)
             end
           end
 
           context 'Not Healthy' do
-            let(:health_checker) { NeverHealthyFake.new }
+            let(:health_checker) { NeverHealthyDummy.new }
+            let(:error_message) { 'MAX RETRIES REACHED' }
 
             before do
               delayer.health_check_retry_limit = 1
             end
 
+            it 'raises an error' do
+              expect { subject.execute }.to raise_error(error_message)
+            end
+
             it 'calls stop task on the canary' do
+              expect { subject.execute }.to raise_error(error_message)
               expect(ecs_gateway).to have_received(:stop_task).with(
                 cluster: some_cluster_arn,
                 task: some_task_arn1,
-                reason: 'AUTOMATED RESTART'
+                reason: restart_reason
               )
             end
 
             it 'does not call stop on the rest of the tasks for the cluster' do
+              expect { subject.execute }.to raise_error(error_message)
               expect(ecs_gateway).to_not have_received(:stop_task).with(
                 cluster: some_cluster_arn,
                 task: some_task_arn2,
-                reason: 'AUTOMATED RESTART'
+                reason: restart_reason
               )
-            end
-
-            it 'retries' do
-              expect(delayer.max_retries_reached?).to eq(true)
             end
           end
         end

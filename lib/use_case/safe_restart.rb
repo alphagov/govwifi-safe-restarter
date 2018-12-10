@@ -21,34 +21,23 @@ module UseCase
       canary, *rest = *tasks
       p "tasks: #{tasks}"
       p "stopping canary #{canary}"
-      stop_tasks(tasks, [canary], cluster_arn)
-      live_canary = newest_task(cluster_arn, tasks)
-
-      p "live canary is: #{live_canary}"
+      stop_and_wait_for_tasks(tasks, [canary], cluster_arn)
 
       p "CANARY HEALTH CHECK: #{health_checker.healthy?}"
 
-      until health_checker.healthy?
-        p "HEALTH CHECK TIMED OUT"
-        return if :timed_out == wait_for_task_with_timeout(tasks, cluster_arn)
-      end
+      wait until health_checker.healthy?
 
-      p "Successfully restarted the canary, moving onto the rest"
-
-      p "REST HEALTH CHECK: #{health_checker.healthy?}"
       if health_checker.healthy?
-        stop_tasks(tasks, rest, cluster_arn)
+        stop_and_wait_for_tasks(tasks, rest, cluster_arn)
       end
     end
 
-    def stop_tasks(all_tasks, tasks, cluster_arn)
+    def stop_and_wait_for_tasks(all_tasks, tasks, cluster_arn)
       tasks.each do |task_arn|
+        p "stopping #{task_arn}"
         stop_task(cluster_arn, task_arn)
 
-        until all_tasks.count == task_arns(cluster_arn).count
-          p 'stopping'
-          return if :timed_out == wait_for_task_with_timeout(all_tasks, cluster_arn)
-        end
+        wait until all_tasks.count == task_arns(cluster_arn).count
       end
     end
 
@@ -60,16 +49,12 @@ module UseCase
       ecs_gateway.stop_task(cluster: cluster, task: task, reason: 'AUTOMATED RESTART')
     end
 
-    def newest_task(cluster, tasks)
-      task_arns(cluster) - tasks
-    end
-
-    def wait_for_task_with_timeout(tasks, cluster_arn)
+    def wait
       delayer.delay
       delayer.increment_retries
 
       if delayer.max_retries_reached?
-        :timed_out
+        raise 'MAX RETRIES REACHED'
       end
     end
 
