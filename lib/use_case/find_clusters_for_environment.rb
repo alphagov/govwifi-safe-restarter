@@ -11,7 +11,7 @@ module UseCase
       end
     end
 
-    private
+  private
 
     attr_reader :ecs_gateway, :environment
   end

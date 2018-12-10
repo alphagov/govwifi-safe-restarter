@@ -3,15 +3,14 @@ ruby File.read('.ruby-version').chomp
 
 gem 'aws-sdk-ecs'
 gem 'aws-sdk-route53'
-gem 'pry'
 gem 'puma'
+gem 'rake'
 gem 'require_all'
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'rake'
 
 group :test do
   gem 'govuk-lint'
-  gem 'rack-test'
+  gem 'pry'
   gem 'rspec'
 end

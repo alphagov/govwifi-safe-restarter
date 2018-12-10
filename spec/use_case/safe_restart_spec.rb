@@ -25,8 +25,7 @@ class EventuallyHealthyHealthCheckDummy
 
   def healthy?
     @call_count += 1
-
-    @call_count >= 3 ? true : false
+    @call_count >= 3
   end
 end
 

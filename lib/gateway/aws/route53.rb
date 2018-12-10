@@ -13,7 +13,7 @@ module Gateway
         client.get_health_check_status(health_check_id: health_check_id)
       end
 
-      private
+    private
 
       DEFAULT_REGION = 'eu-west-2'.freeze
 

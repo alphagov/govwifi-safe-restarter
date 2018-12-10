@@ -9,12 +9,12 @@ module UseCase
 
     def execute
       cluster_finder.execute.each do |cluster|
-        "Rolling Restart #{cluster}"
+        p "Rolling Restart #{cluster}"
         rolling_restart_cluster(cluster)
       end
     end
 
-    private
+  private
 
     def rolling_restart_cluster(cluster_arn)
       tasks = task_arns(cluster_arn)
