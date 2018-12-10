@@ -7,6 +7,8 @@ TODO
   - Notifier needed?
   - Multi region
   - Disable this app so it doesn't restart again
+  - Do we need the aws namespace in the gateways?
+  - Jenkins
 
 ```ruby
 bundle exec rake safe_restart[staging]
