@@ -7,7 +7,7 @@ module UseCase
 
     def execute
       ecs_gateway.list_clusters.select do |cluster_arn|
-        cluster_arn.match?(/#{environment}/)
+        cluster_arn.match?(/#{environment}-frontend/)
       end
     end
 

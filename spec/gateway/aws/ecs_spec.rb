@@ -1,7 +1,7 @@
 require_relative '../../../lib/gateway/aws/ecs'
 
 describe Gateway::Aws::Ecs do
-  subject { described_class.new(aws_config: config) }
+  subject { described_class.new(config: config) }
 
   context 'clusters' do
     let(:config) do

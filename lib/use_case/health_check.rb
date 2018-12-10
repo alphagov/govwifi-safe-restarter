@@ -4,10 +4,12 @@ module UseCase
       @route53_gateway = route53_gateway
     end
 
-    def execute
+    def healthy?
       health_checks.map do |health_check|
-        status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
-      end.all?
+        unless noop_parent_health_check?(health_check)
+          status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
+        end
+      end.compact.all?
     end
 
     private
@@ -20,6 +22,10 @@ module UseCase
       all_health_checkers_healthy?(health_check)
     end
 
+    def noop_parent_health_check?(health_check)
+      health_check.health_check_config.child_health_checks.count > 0
+    end
+
     def all_health_checkers_healthy?(health_check)
       health_check.health_check_observations.all? do |a|
         a.status_report.status == SUCCESS_STATUS
@@ -27,7 +33,7 @@ module UseCase
     end
 
     def health_checks
-      @health_checks ||= route53_gateway.list_health_checks.health_checks
+      route53_gateway.list_health_checks.health_checks
     end
   end
 end

@@ -9,7 +9,10 @@ module UseCase
     end
 
     def execute
-      cluster_finder.execute.each { |cluster| rolling_restart_cluster(cluster) }
+      cluster_finder.execute.each do |cluster|
+        "Rolling Restart #{cluster}"
+        rolling_restart_cluster(cluster)
+      end
     end
 
     private
@@ -17,14 +20,26 @@ module UseCase
     def rolling_restart_cluster(cluster_arn)
       tasks = task_arns(cluster_arn)
       canary, *rest = *tasks
+      p "tasks: #{tasks}"
+      p "stopping canary #{canary}"
       stop_tasks(tasks, [canary], cluster_arn)
       live_canary = newest_task(cluster_arn, tasks)
 
-      until health_checker.healthy?(live_canary)
+      p "live canary is: #{live_canary}"
+
+      p "CANARY HEALTH CHECK: #{health_checker.healthy?}"
+
+      until health_checker.healthy?
+        p "HEALTH CHECK TIMED OUT"
         return if :timed_out == wait_for_task_with_timeout(tasks, cluster_arn)
       end
 
-      stop_tasks(tasks, rest, cluster_arn)
+      p "Successfully restarted the canary, moving onto the rest"
+
+      p "REST HEALTH CHECK: #{health_checker.healthy?}"
+      if health_checker.healthy?
+        stop_tasks(tasks, rest, cluster_arn)
+      end
     end
 
     def stop_tasks(all_tasks, tasks, cluster_arn)
@@ -32,6 +47,7 @@ module UseCase
         stop_task(cluster_arn, task_arn)
 
         until all_tasks.count == task_arns(cluster_arn).count
+          p 'stopping'
           return if :timed_out == wait_for_task_with_timeout(all_tasks, cluster_arn)
         end
       end

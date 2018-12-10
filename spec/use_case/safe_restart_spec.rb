@@ -23,7 +23,7 @@ class EventuallyHealthyHealthCheckFake
     @call_count = 0
   end
 
-  def healthy?(_)
+  def healthy?
     @call_count += 1
 
     @call_count >= 3 ? true : false
@@ -33,7 +33,7 @@ end
 class NeverHealthyFake
   def initialize; end
 
-  def healthy?(_)
+  def healthy?
     false
   end
 end

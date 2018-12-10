@@ -107,7 +107,7 @@ describe UseCase::HealthCheck do
   let(:aws_route53_gateway) { FakeHealthyRoute53Gateway.new }
 
   let(:result) do
-    described_class.new(route53_gateway: aws_route53_gateway).execute
+    described_class.new(route53_gateway: aws_route53_gateway).healthy?
   end
 
   context 'Given health checkers are healthy' do
