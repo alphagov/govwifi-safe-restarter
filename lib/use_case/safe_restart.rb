@@ -19,14 +19,16 @@ module UseCase
     def rolling_restart_cluster(cluster_arn)
       tasks = task_arns(cluster_arn)
       canary, *rest = *tasks
+      logger.info("Found Canary: #{canary}")
       restart_and_wait_for(canary, tasks, cluster_arn)
       wait_or_timeout until health_checker.healthy?
 
       rest.each { |task| restart_and_wait_for(task, tasks, cluster_arn) }
     end
 
-    def restart_and_wait_for(task_arn, original_tasks, cluster_arn)
-      stop_task(cluster_arn, task_arn)
+    def restart_and_wait_for(task, original_tasks, cluster_arn)
+      logger.info("Stopping: #{task}")
+      stop_task(cluster_arn, task)
       wait_or_timeout until original_tasks.count == task_arns(cluster_arn).count
     end
 

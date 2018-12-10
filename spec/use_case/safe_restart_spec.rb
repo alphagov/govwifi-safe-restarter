@@ -44,7 +44,7 @@ describe UseCase::SafeRestart do
   let(:cluster_finder) { double(execute: [some_cluster_arn]) }
   let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
   let(:restart_reason) { 'AUTOMATED RESTART' }
-  let(:logger) { Logger::INFO }
+  let(:logger) { double(info: nil) }
 
   subject do
     described_class.new(
