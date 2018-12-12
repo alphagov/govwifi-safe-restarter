@@ -48,7 +48,7 @@ module UseCase
     def wait_or_timeout
       p 'sleeping'
       delayer.delay
-      p 'incermenting retries'
+      p 'incrementing retries'
       delayer.increment_retries
 
       if delayer.max_retries_reached?
