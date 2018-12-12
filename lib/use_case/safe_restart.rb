@@ -19,18 +19,18 @@ module UseCase
     def rolling_restart_cluster(cluster)
       tasks = tasks(cluster)
       canary, *rest = *tasks
-      logger.info("Found Canary: #{canary}")
+      p "Stopping Canary: #{canary}"
       restart_and_wait_for(canary, tasks, cluster)
       wait_or_timeout until health_checker.healthy?
 
+      p "Stopping the Rest: #{rest}"
       rest.each { |task| restart_and_wait_for(task, tasks, cluster) }
     end
 
     def restart_and_wait_for(task, original_tasks, cluster)
-      logger.info("Stopping: #{task}")
       stop_task(cluster, task)
       wait_or_timeout until original_tasks.count == tasks(cluster).count
-      logger.info("New Task has come back up: #{task}")
+      p "New Task has come back up: #{task}"
     end
 
     def tasks(cluster)
@@ -42,7 +42,9 @@ module UseCase
     end
 
     def wait_or_timeout
+      p 'sleeping'
       delayer.delay
+      p 'incermenting retries'
       delayer.increment_retries
 
       if delayer.max_retries_reached?
