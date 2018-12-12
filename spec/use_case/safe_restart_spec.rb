@@ -1,6 +1,6 @@
 require_relative '../../lib/use_case/safe_restart'
 
-class DelayerDummy
+class DelayerFake
   attr_accessor :health_check_retry_limit
 
   def initialize
@@ -18,18 +18,29 @@ class DelayerDummy
   end
 end
 
-class EventuallyHealthyHealthCheckDummy
+class EventuallyHealthyHealthCheckFake
   def initialize
     @call_count = 0
   end
 
   def healthy?
     @call_count += 1
-    @call_count >= 3
+    @call_count == 1 || @call_count > 4
   end
 end
 
-class NeverHealthyDummy
+class HealthyUntilFirstRestartFake
+  def initialize
+    @call_count = 0
+  end
+
+  def healthy?
+    @call_count += 1
+    @call_count == 1
+  end
+end
+
+class NeverHealthyFake
   def initialize; end
 
   def healthy?
@@ -38,8 +49,8 @@ class NeverHealthyDummy
 end
 
 describe UseCase::SafeRestart do
-  let(:health_checker) { EventuallyHealthyHealthCheckDummy.new }
-  let(:delayer) { DelayerDummy.new }
+  let(:health_checker) { EventuallyHealthyHealthCheckFake.new }
+  let(:delayer) { DelayerFake.new }
   let(:some_cluster_arn) { 'arn:aws:ecs:eu-west-2:123:cluster/some-cluster' }
   let(:cluster_finder) { double(execute: [some_cluster_arn]) }
   let(:ecs_gateway) { double(list_tasks: [], stop_task: nil) }
@@ -54,6 +65,17 @@ describe UseCase::SafeRestart do
       delayer: delayer,
       logger: logger
     )
+  end
+
+  describe 'Safe Restart abort' do
+    let(:health_checker) { NeverHealthyFake.new }
+
+    it 'does not try restart the services if the health checks are unhealthy' do
+      expect { subject.execute }.to raise_error(
+        'Cannot Reboot Cluster, Health Checks failed'
+      )
+      expect(ecs_gateway).to_not have_received(:stop_task)
+    end
   end
 
   describe 'Safe Restart success' do
@@ -114,7 +136,7 @@ describe UseCase::SafeRestart do
           end
 
           context 'Not Healthy' do
-            let(:health_checker) { NeverHealthyDummy.new }
+            let(:health_checker) { HealthyUntilFirstRestartFake.new }
             let(:error_message) { 'MAX RETRIES REACHED' }
 
             before do
