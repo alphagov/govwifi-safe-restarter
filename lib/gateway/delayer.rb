@@ -17,7 +17,7 @@ module Gateway
       @retries >= MAX_RETRIES
     end
 
-    MAX_RETRIES = 4
+    MAX_RETRIES = 10
     WAIT_TIME = 150 # Cloudwatch health checks are 2 mins, 150 seconds is just over 2 mins
   end
 end
