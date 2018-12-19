@@ -21,32 +21,36 @@ module UseCase
   private
 
     def rolling_restart_cluster(cluster)
-      tasks = tasks(cluster)
+      tasks = cluster_tasks(cluster)
+      p "Tasks for #{cluster} are #{tasks}"
       canary, *rest = *tasks
-      p "Stopping Canary: #{canary}"
+      p "Canary is: #{canary}"
+      p "Rest is: #{rest}"
       restart_and_wait_for(canary, tasks, cluster)
       wait_or_timeout until health_checker.healthy?
 
-      p "Stopping the Rest: #{rest}"
-      rest.each { |task| restart_and_wait_for(task, tasks, cluster) }
+      p "Moving onto the rest"
+      rest.each do |task|
+        p "Rest task #{task} is about to be restarted"
+        restart_and_wait_for(task, tasks, cluster)
+      end
     end
 
     def restart_and_wait_for(task, original_tasks, cluster)
       stop_task(cluster, task)
-      wait_or_timeout until original_tasks.count == tasks(cluster).count
-      p "New Task has come back up: #{task}"
+      wait_or_timeout until original_tasks.count == cluster_tasks(cluster).count
     end
 
-    def tasks(cluster)
+    def cluster_tasks(cluster)
       ecs_gateway.list_tasks(cluster: cluster)
     end
 
     def stop_task(cluster, task)
+      p "Stopping task #{task} in cluster #{cluster}"
       ecs_gateway.stop_task(cluster: cluster, task: task, reason: 'AUTOMATED RESTART')
     end
 
     def wait_or_timeout
-      p 'sleeping'
       delayer.delay
       p 'incrementing retries'
       delayer.increment_retries

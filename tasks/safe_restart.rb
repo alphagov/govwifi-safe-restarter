@@ -12,7 +12,7 @@ task :safe_restart, :environment do |_, args|
   environment = args.fetch(:environment)
   environment = environment == 'production' ? 'wifi' : environment # very unfortunate
 
-  %w(eu-west-1 eu-west-2).each do |region|
+  %w(eu-west-2 eu-west-1).each do |region|
     p "== SAFE RESTARTING #{region} =="
     ecs_gateway = Gateway::Aws::Ecs.new(config: { region: region })
     route53_gateway = Gateway::Aws::Route53.new
@@ -27,8 +27,6 @@ task :safe_restart, :environment do |_, args|
       delayer: delayer,
       logger: logger
     ).execute
-
-    cluster_finder.execute
   end
 
   p 'SAFE RESTARTING COMPLETED'

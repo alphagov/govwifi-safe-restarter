@@ -10,6 +10,7 @@ module Gateway
 
     def increment_retries
       @retries += 1
+      p "current retries: #{@retries}"
     end
 
     def max_retries_reached?
@@ -17,6 +18,6 @@ module Gateway
     end
 
     MAX_RETRIES = 4
-    WAIT_TIME = 200 # Cloudwatch health checks are 2 mins, 150 seconds is just over 2 mins
+    WAIT_TIME = 150 # Cloudwatch health checks are 2 mins, 150 seconds is just over 2 mins
   end
 end
