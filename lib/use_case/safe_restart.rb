@@ -21,6 +21,7 @@ module UseCase
   private
 
     def rolling_restart_cluster(cluster)
+      p "Rolling restart is starting on #{cluster}"
       tasks = cluster_tasks(cluster)
       p "Tasks for #{cluster} are #{tasks}"
       canary, *rest = *tasks
