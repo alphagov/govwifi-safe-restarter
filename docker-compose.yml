@@ -5,5 +5,6 @@ services:
     build: .
     environment:
       RACK_ENV: development
+      SENTRY_DSN: https://7501b72138ce43c485378317d2e36078@sentry.io/1398533
     ports:
       - "8080:8080"

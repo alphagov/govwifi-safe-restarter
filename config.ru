@@ -5,6 +5,7 @@ if %w[production staging].include?(RACK_ENV)
 
   Raven.configure do |config|
     config.dsn = ENV['SENTRY_DSN']
+    config.environments = ['staging', 'production']
   end
 
   use Raven::Rack

@@ -8,6 +8,7 @@ gem 'rake', '12.3.1'
 gem 'require_all', '2.0.0'
 gem 'sinatra', '2.0.2'
 gem 'sinatra-contrib', '2.0.2'
+gem 'sentry-raven', '~> 2.9'
 
 group :test do
   gem 'govuk-lint'
