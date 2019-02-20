@@ -3,17 +3,17 @@ GEM
   specs:
     ast (2.4.0)
     aws-eventstream (1.0.1)
-    aws-partitions (1.111.0)
-    aws-sdk-core (3.37.0)
+    aws-partitions (1.139.0)
+    aws-sdk-core (3.46.2)
       aws-eventstream (~> 1.0)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-ecs (1.22.0)
-      aws-sdk-core (~> 3, >= 3.26.0)
+    aws-sdk-ecs (1.30.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
       aws-sigv4 (~> 1.0)
-    aws-sdk-route53 (1.15.0)
-      aws-sdk-core (~> 3, >= 3.26.0)
+    aws-sdk-route53 (1.17.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.0.3)
     backports (2.8.2)
@@ -39,8 +39,6 @@ GEM
     rack (2.0.6)
     rack-protection (2.0.2)
       rack
-    rack-test (1.0.0)
-      rack (>= 1.0, < 3)
     rainbow (3.0.0)
     rake (12.3.1)
     rb-fsevent (0.10.3)
@@ -97,17 +95,16 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk-ecs
-  aws-sdk-route53
+  aws-sdk-ecs (~> 1.30.0)
+  aws-sdk-route53 (~> 1.17.0)
   govuk-lint
   pry
-  puma
-  rack-test
-  rake
-  require_all
+  puma (= 3.11.4)
+  rake (= 12.3.1)
+  require_all (= 2.0.0)
   rspec
-  sinatra
-  sinatra-contrib
+  sinatra (= 2.0.2)
+  sinatra-contrib (= 2.0.2)
 
 RUBY VERSION
    ruby 2.5.3p105
