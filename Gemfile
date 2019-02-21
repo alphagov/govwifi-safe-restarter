@@ -9,7 +9,6 @@ gem 'require_all', '2.0.0'
 gem 'sinatra', '2.0.2'
 gem 'sinatra-contrib', '2.0.2'
 
-
 group :test do
   gem 'govuk-lint'
   gem 'pry'
