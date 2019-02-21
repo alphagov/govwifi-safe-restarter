@@ -9,6 +9,12 @@ task :safe_restart, :environment do |_, args|
     abort 'An environment of "staging" or "production" must be specified'
   end
 
+  begin
+    1 / 0
+  rescue ZeroDivisionError => exception
+    Raven.capture_exception(exception)
+  end
+
   environment = args.fetch(:environment)
   environment = environment == 'production' ? 'wifi' : environment # very unfortunate
 
