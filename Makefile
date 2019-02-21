@@ -32,4 +32,4 @@ stop:
 	$(DOCKER_COMPOSE) kill
 	$(DOCKER_COMPOSE) rm -f
 
-.PHONY: test serve stop lint
+.PHONY: build serve lint test stop
