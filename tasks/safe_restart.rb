@@ -4,6 +4,7 @@ require 'require_all'
 require_all 'lib'
 logger = Logger.new(STDOUT)
 
+# rubocop:disable Metrics/BlockLength
 task :safe_restart, :environment do |_, args|
   unless %w(staging production).include?(args['environment'])
     abort 'An environment of "staging" or "production" must be specified'
@@ -37,3 +38,4 @@ task :safe_restart, :environment do |_, args|
 
   p 'SAFE RESTARTING COMPLETED'
 end
+# rubocop:enable Metrics/BlockLength
