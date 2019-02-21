@@ -7,6 +7,7 @@ gem 'multipart-post', '~> 2.0'
 gem 'puma', '~> 3.11.4'
 gem 'rake', '~> 12.3.1'
 gem 'require_all', '~> 2.0'
+gem 'sentry-raven', '~> 2.9'
 gem 'sinatra', '~> 2.0.2'
 gem 'sinatra-contrib', '~> 2.0.2'
 
