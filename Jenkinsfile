@@ -12,6 +12,12 @@ pipeline {
       }
     }
 
+    stage('Linter') {
+      steps {
+        sh 'make lint'
+      }
+    }
+
     stage('Publish stable tag') {
       when{
         branch 'master'
