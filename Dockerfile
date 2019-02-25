@@ -1,5 +1,5 @@
 FROM ruby:2.5.3-alpine
-ARG BUNDLE_INSTALL_CMD
+ARG BUNDLE_INSTALL_CMD=bundle
 ENV RACK_ENV=development
 
 WORKDIR /usr/src/app
@@ -12,5 +12,3 @@ RUN apk --update --upgrade add build-base && \
   rm -rf /var/cache/apk/*
 
 COPY . .
-
-CMD ["bundle", "exec", "rackup", "-o", "0.0.0.0", "-p", "8080"]
