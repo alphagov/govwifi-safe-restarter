@@ -54,13 +54,6 @@ bundle exec rake safe_restart[staging]
 
 Results of the daily restart are printed to a CloudWatch log group called `[env]-safe-restart-docker-log-group`
 
-## TODO
-  - Lock down Gem versions
-  - Dependabot
-  - Sentry
-  - Run Rake as a standalone task (no Sinatra required)
-  - Use the `sensible logging` gem
-
 ## Licence
 
 This codebase is released under [the MIT License][mit].
