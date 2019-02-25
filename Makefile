@@ -11,25 +11,23 @@ ifndef JENKINS_URL
 	DOCKER_COMPOSE += -f docker-compose.development.yml
 endif
 
-build:
-	$(MAKE) stop
+build: stop
 	$(DOCKER_BUILD_CMD)
 
-serve:
-	$(MAKE) build
+serve: build
 	$(DOCKER_COMPOSE) up -d
 
-lint:
-	$(MAKE) build
+lint: build
 	$(DOCKER_COMPOSE) run --rm app bundle exec govuk-lint-ruby
 
-test:
-	$(MAKE) serve
+test-rspec: serve
 	$(DOCKER_COMPOSE) run --rm app rspec
+
+test: test-rspec
 	$(MAKE) stop
 
 stop:
 	$(DOCKER_COMPOSE) kill
 	$(DOCKER_COMPOSE) rm -f
 
-.PHONY: test serve stop lint
+.PHONY: build serve lint test test-rspec stop
