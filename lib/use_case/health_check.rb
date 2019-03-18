@@ -5,13 +5,10 @@ module UseCase
     end
 
     def healthy?
-      health_check_results = health_checks.map do |health_check|
-        unless noop_parent_health_check?(health_check)
-          status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
-        end
+      health_checks.all? do |health_check|
+        return true if noop_parent_health_check?(health_check)
+        status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
       end
-
-      health_check_results.compact.all?
     end
 
   private
