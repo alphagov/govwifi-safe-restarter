@@ -24,7 +24,7 @@ caches:
   - path: cache
 
 run:
-  path: sh
+  path: bash
   args:
     - '-exc'
     - |
