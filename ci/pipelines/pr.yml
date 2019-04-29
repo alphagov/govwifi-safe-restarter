@@ -51,7 +51,7 @@ jobs:
       # used to avoid building multiple times down the road
       - task: pre-build
         privileged: true
-        image: runner
+        #image: runner
         file: src/ci/tasks/pre-build.yml
 
       - aggregate:

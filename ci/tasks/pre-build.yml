@@ -1,23 +1,32 @@
 ---
 platform: linux
 
+image_resource:
+  type: registry-image
+  source:
+    repository: concourse/builder-task
+
+# https://github.com/concourse/builder-task#params
+params:
+  # docker-compose, "<directory name>_<service name>"
+  REPOSITORY: 'src_app'
+  CONTEXT: src
+  BUILD_ARG_BUNDLE_INSTALL_CMD: 'bundle install --jobs 20 --retry 5'
+  TAG: latest
+
 inputs:
   - name: src
-  - name: docker-cache/ruby-image
 
 outputs:
-  # aligns with PREBUILT_TAG
   - name: docker-cache/app-prebuilt
 
 caches:
-  - path: docker-cache/app-prebuilt-cached
-
-params:
-  # Expose that we're using Concourse
-  ON_CONCOURSE: true
-  # Set this to custom image names for preloading the app image. see `docker-compose.concourse.yml`
-  PREBUILT_TAG: 'app-prebuilt'
-  PREBUILT_CACHED_DIR: 'docker-cache/app-prebuilt-cached'
+  - path: cache
 
 run:
-  path: src/ci/tasks/scripts/pre-build.sh
+  path: sh
+  args:
+    - '-exc'
+    - |
+      build
+      mv image/image.tar docker-cache/app-prebuilt/image.tar
