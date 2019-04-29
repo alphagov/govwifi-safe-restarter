@@ -1,0 +1,8 @@
+# Ignore all hidden files
+.*
+**/.*
+
+# Allow hidden ruby files
+!.rspec
+!.rubocop.yml
+!.ruby-version
