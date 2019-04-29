@@ -11,7 +11,7 @@ params:
   # docker-compose, "<directory name>_<service name>"
   REPOSITORY: 'src_app'
   CONTEXT: 'src'
-  BUILD_ARG_BUNDLE_INSTALL_CMD: "'bundle install --jobs 20 --retry 5'"
+  BUILD_ARG_BUNDLE_INSTALL_CMD: "\'bundle install --jobs 20 --retry 5\'"
   TAG: latest
 
 inputs:
