@@ -26,7 +26,7 @@ caches:
 run:
   path: bash
   args:
-    - '-exc'
+    - '-exvc'
     - |
       build
       mv image/image.tar docker-cache/app-prebuilt/image.tar
