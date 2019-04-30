@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   app:
+    image: src_app
     build:
       context: .
       cache_from:
