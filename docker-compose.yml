@@ -2,7 +2,10 @@ version: '3.4'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      cache_from:
+        - src_app
     environment:
       RACK_ENV: development
     expose:
