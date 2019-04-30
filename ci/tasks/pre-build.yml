@@ -29,5 +29,6 @@ run:
   args:
     - '-exvc'
     - |
+      mkdir -p image
       build
       mv image/image.tar docker-cache/app-prebuilt/image.tar
