@@ -103,9 +103,10 @@ end
 
 describe UseCase::HealthCheck do
   let(:aws_route53_gateway) { FakeHealthyRoute53Gateway.new }
+  let(:delayer) { spy('Gateway::Delayer', delay: nil) }
 
   let(:result) do
-    described_class.new(route53_gateway: aws_route53_gateway).healthy?
+    described_class.new(route53_gateway: aws_route53_gateway, delayer: delayer).healthy?
   end
 
   context 'Given health checkers are healthy' do
@@ -119,6 +120,13 @@ describe UseCase::HealthCheck do
 
     it 'returns an offline status' do
       expect(result).to eq(false)
+    end
+  end
+
+  context 'given a delayer' do
+    it 'delays the health checks to avoid throttling' do
+      described_class.new(route53_gateway: FakeHealthyRoute53Gateway.new, delayer: delayer).healthy?
+      expect(delayer).to have_received(:delay).twice.with(wait_time: 5)
     end
   end
 end
