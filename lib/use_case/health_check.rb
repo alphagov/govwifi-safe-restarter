@@ -1,20 +1,22 @@
 module UseCase
   class HealthCheck
-    def initialize(route53_gateway: Gateways::Route53.new)
+    def initialize(route53_gateway: Gateway::Aws::Route53.new, delayer: Gateway::Delayer.new(wait_time: 5))
       @route53_gateway = route53_gateway
+      @delayer = delayer
     end
 
     def healthy?
       health_checks.all? do |health_check|
         return true if noop_parent_health_check?(health_check)
 
+        delayer.delay(wait_time: 5)
         status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
       end
     end
 
   private
 
-    attr_reader :route53_gateway
+    attr_reader :route53_gateway, :delayer
 
     SUCCESS_STATUS = 'Success: HTTP Status Code 200, OK'.freeze
 
