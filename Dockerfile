@@ -1,4 +1,4 @@
-FROM ruby:2.5.3-alpine3.9
+FROM ruby:2.6.3-alpine3.9
 ARG BUNDLE_INSTALL_CMD=bundle
 ENV RACK_ENV=development
 
