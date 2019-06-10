@@ -10,7 +10,6 @@ This application is responsible for restarting the frontend RADIUS servers in a 
   * [Deploying changes](#deploying-changes)
 * [Running the application](#running-the-application)
 * [Debugging](#debugging)
-* [TODO](#todo)
 * [Licence](#licence)
 
 ## Overview
