@@ -7,6 +7,7 @@ module UseCase
     def healthy?
       health_checks.all? do |health_check|
         return true if noop_parent_health_check?(health_check)
+
         status(route53_gateway.get_health_check_status(health_check_id: health_check.id))
       end
     end
