@@ -6,10 +6,8 @@ endif
 
 DOCKER_COMPOSE = docker-compose -f docker-compose.yml
 
-ifndef JENKINS_URL
-  ifndef ON_CONCOURSE
-    DOCKER_COMPOSE += -f docker-compose.development.yml
-  endif
+ifndef ON_CONCOURSE
+	DOCKER_COMPOSE += -f docker-compose.development.yml
 endif
 
 ifdef ON_CONCOURSE
