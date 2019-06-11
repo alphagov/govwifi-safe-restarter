@@ -1,6 +1,6 @@
 module UseCase
   class HealthCheck
-    def initialize(route53_gateway: Gateway::Aws::Route53.new, delayer: Gateway::Delayer.new(wait_time: 5))
+    def initialize(route53_gateway:, delayer:)
       @route53_gateway = route53_gateway
       @delayer = delayer
     end
