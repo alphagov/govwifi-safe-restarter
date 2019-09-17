@@ -6,7 +6,7 @@ gem 'aws-sdk-route53', '~> 1.25.0'
 gem 'multipart-post', '~> 2.1'
 gem 'rake', '~> 12.3.3'
 gem 'require_all', '~> 2.0'
-gem 'sentry-raven', '~> 2.9'
+gem 'sentry-raven', '~> 2.11'
 
 group :test do
   gem 'govuk-lint'
