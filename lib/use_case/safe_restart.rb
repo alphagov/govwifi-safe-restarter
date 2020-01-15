@@ -10,7 +10,7 @@ module UseCase
 
     def execute
       unless health_checker.healthy?
-        raise 'Cannot Reboot Cluster, Health Checks failed'
+        raise "Cannot Reboot Cluster, Health Checks failed"
       end
 
       cluster_finder.execute.each do |cluster|
@@ -48,16 +48,16 @@ module UseCase
 
     def stop_task(cluster, task)
       p "Stopping task #{task} in cluster #{cluster}"
-      ecs_gateway.stop_task(cluster: cluster, task: task, reason: 'AUTOMATED RESTART')
+      ecs_gateway.stop_task(cluster: cluster, task: task, reason: "AUTOMATED RESTART")
     end
 
     def wait_or_timeout
       delayer.delay
-      p 'incrementing retries'
+      p "incrementing retries"
       delayer.increment_retries
 
       if delayer.max_retries_reached?
-        raise 'MAX RETRIES REACHED'
+        raise "MAX RETRIES REACHED"
       end
     end
 

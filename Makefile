@@ -29,7 +29,7 @@ serve: build
 	$(DOCKER_COMPOSE) up -d
 
 lint: build
-	$(DOCKER_COMPOSE) run --rm app bundle exec govuk-lint-ruby
+	$(DOCKER_COMPOSE) run --rm app bundle exec rubocop
 
 test-rspec: serve
 	$(DOCKER_COMPOSE) run --rm app rspec

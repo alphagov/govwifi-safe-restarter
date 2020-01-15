@@ -5,7 +5,7 @@ module Gateway
         @client = ::Aws::ECS::Client.new(aws_config(config))
       end
 
-      def stop_task(cluster:, task:, reason: 'AUTOMATED RESTART')
+      def stop_task(cluster:, task:, reason: "AUTOMATED RESTART")
         client.stop_task(cluster: cluster, task: task, reason: reason)
       end
 
@@ -21,7 +21,7 @@ module Gateway
 
       attr_reader :client
 
-      DEFAULT_REGION = 'eu-west-2'.freeze
+      DEFAULT_REGION = "eu-west-2".freeze
 
       def aws_config(config)
         { region: DEFAULT_REGION }.merge(config)
