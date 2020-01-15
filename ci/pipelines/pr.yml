@@ -95,7 +95,7 @@ jobs:
   - name: lint & test
     interruptible: true
     # force people to use new git commits to rerun PRs
-    disable_manual_trigger: true
+    disable_manual_trigger: false
     plan:
       - aggregate:
         - do:
