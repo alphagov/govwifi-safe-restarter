@@ -1,5 +1,5 @@
-require 'rspec'
+require "rspec"
 
-ENV['RACK_ENV'] = 'test'
+ENV["RACK_ENV"] = "test"
 
-require File.expand_path('../lib/loader.rb', __dir__)
+require File.expand_path("../lib/loader.rb", __dir__)

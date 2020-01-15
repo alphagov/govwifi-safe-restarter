@@ -1,16 +1,16 @@
-require 'logger'
+require "logger"
 
-require 'require_all'
-require_all 'lib'
+require "require_all"
+require_all "lib"
 logger = Logger.new(STDOUT)
 
 task :safe_restart, :environment do |_, args|
-  unless %w(staging production).include?(args['environment'])
+  unless %w(staging production).include?(args["environment"])
     abort 'An environment of "staging" or "production" must be specified'
   end
 
   environment = args.fetch(:environment)
-  environment = environment == 'production' ? 'wifi' : environment # very unfortunate
+  environment = environment == "production" ? "wifi" : environment # very unfortunate
 
   %w(eu-west-2 eu-west-1).each do |region|
     p "== SAFE RESTARTING #{region} =="
@@ -24,9 +24,9 @@ task :safe_restart, :environment do |_, args|
       ecs_gateway: ecs_gateway,
       health_checker: health_checker,
       delayer: Gateway::Delayer.new,
-      logger: logger
+      logger: logger,
     ).execute
   end
 
-  p 'SAFE RESTARTING COMPLETED'
+  p "SAFE RESTARTING COMPLETED"
 end

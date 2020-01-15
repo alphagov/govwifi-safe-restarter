@@ -18,7 +18,7 @@ module UseCase
 
     attr_reader :route53_gateway, :delayer
 
-    SUCCESS_STATUS = 'Success: HTTP Status Code 200, OK'.freeze
+    SUCCESS_STATUS = "Success: HTTP Status Code 200, OK".freeze
 
     def status(health_check)
       all_health_checkers_healthy?(health_check)
