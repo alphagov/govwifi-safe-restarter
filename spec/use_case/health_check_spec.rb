@@ -2,7 +2,9 @@ class FakeHealthyRoute53Gateway
   def get_health_check_status(health_check_id:)
     client = Aws::Route53::Client.new(stub_responses: true)
 
-    client.stub_responses(:get_health_check_status, health_check_observations:
+    client.stub_responses(
+      :get_health_check_status,
+      health_check_observations:
     [
       {
         region: "ap-southeast-2",
@@ -10,14 +12,16 @@ class FakeHealthyRoute53Gateway
         status_report: {
           status: "Success: HTTP Status Code 200, OK",
         },
-      }, {
+      },
+      {
         region: "ap-eu-west-1",
         ip_address: "27.111.39.33",
         status_report: {
           status: "Success: HTTP Status Code 200, OK",
         },
-      }
-    ])
+      },
+    ],
+    )
 
     client.get_health_check_status(health_check_id: health_check_id)
   end
@@ -38,7 +42,8 @@ class FakeHealthyRoute53Gateway
                 measure_latency: false,
                 type: "HTTP",
               },
-            }, {
+            },
+            {
               caller_reference: "AdminMonitoring",
               id: "xyz789",
               health_check_version: 1,
@@ -46,7 +51,7 @@ class FakeHealthyRoute53Gateway
                 measure_latency: false,
                 type: "HTTP",
               },
-            }
+            },
           ],
         },
       },
@@ -60,7 +65,9 @@ class FakeUnHealthyRoute53Gateway
   def get_health_check_status(health_check_id:)
     client = Aws::Route53::Client.new(stub_responses: true)
 
-    client.stub_responses(:get_health_check_status, health_check_observations:
+    client.stub_responses(
+      :get_health_check_status,
+      health_check_observations:
       [
         {
           region: "ap-southeast-2",
@@ -69,7 +76,8 @@ class FakeUnHealthyRoute53Gateway
             status: "Failure: HTTP Status Code 500, Host Unreachable",
           },
         },
-      ])
+      ],
+    )
 
     client.get_health_check_status(health_check_id: health_check_id)
   end

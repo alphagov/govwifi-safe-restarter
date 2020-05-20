@@ -1,12 +1,12 @@
+require "active_support/core_ext/module"
+
 module Gateway
   module Aws
     class Route53
+      delegate :list_health_checks, to: :client
+
       def initialize(config: {})
         @client = ::Aws::Route53::Client.new(aws_config(config))
-      end
-
-      def list_health_checks
-        client.list_health_checks
       end
 
       def get_health_check_status(health_check_id:)
