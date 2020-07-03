@@ -5,14 +5,14 @@ require_all "lib"
 logger = Logger.new(STDOUT)
 
 task :safe_restart, :environment do |_, args|
-  unless %w(staging production).include?(args["environment"])
+  unless %w[staging production].include?(args["environment"])
     abort 'An environment of "staging" or "production" must be specified'
   end
 
   environment = args.fetch(:environment)
   environment = environment == "production" ? "wifi" : environment # very unfortunate
 
-  %w(eu-west-2 eu-west-1).each do |region|
+  %w[eu-west-2 eu-west-1].each do |region|
     p "== SAFE RESTARTING #{region} =="
     ecs_gateway = Gateway::Aws::Ecs.new(config: { region: region })
     route53_gateway = Gateway::Aws::Route53.new
