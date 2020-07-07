@@ -10,13 +10,14 @@ class FakeHealthyRoute53Gateway
         status_report: {
           status: "Success: HTTP Status Code 200, OK",
         },
-      }, {
+      },
+      {
         region: "ap-eu-west-1",
         ip_address: "27.111.39.33",
         status_report: {
           status: "Success: HTTP Status Code 200, OK",
         },
-      }
+      },
     ])
 
     client.get_health_check_status(health_check_id: health_check_id)
@@ -38,7 +39,8 @@ class FakeHealthyRoute53Gateway
                 measure_latency: false,
                 type: "HTTP",
               },
-            }, {
+            },
+            {
               caller_reference: "AdminMonitoring",
               id: "xyz789",
               health_check_version: 1,
@@ -46,7 +48,7 @@ class FakeHealthyRoute53Gateway
                 measure_latency: false,
                 type: "HTTP",
               },
-            }
+            },
           ],
         },
       },
