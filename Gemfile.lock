@@ -84,7 +84,7 @@ GEM
     rubocop-rspec (1.42.0)
       rubocop (>= 0.87.0)
     ruby-progressbar (1.10.1)
-    sentry-raven (3.0.2)
+    sentry-raven (3.0.3)
       faraday (>= 1.0)
     thread_safe (0.3.6)
     tzinfo (1.2.7)
