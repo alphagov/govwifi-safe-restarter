@@ -18,6 +18,6 @@ module Gateway
     end
 
     MAX_RETRIES = 10
-    DEFAULT_WAIT_TIME = 300 # Cloudwatch health checks are 2 mins, 300 seconds is 5 mins
+    DEFAULT_WAIT_TIME = 600 # Cloudwatch health checks are 2 mins, 600 seconds is 10 mins
   end
 end
