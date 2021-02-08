@@ -18,6 +18,6 @@ module Gateway
     end
 
     MAX_RETRIES = 10
-    DEFAULT_WAIT_TIME = 600 # Cloudwatch health checks are 2 mins, 600 seconds is 10 mins
+    DEFAULT_WAIT_TIME = 900 # 900 seconds is 15 mins. Currently docker containers are taking 11+ minutes to spawn
   end
 end
