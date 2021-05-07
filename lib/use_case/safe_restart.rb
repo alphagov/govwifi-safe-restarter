@@ -10,6 +10,7 @@ module UseCase
 
     def execute
       unless health_checker.healthy?
+        # Provide reason for failure: raise "Cannot Reboot Cluster, Health Checks failed: <error message>"
         raise "Cannot Reboot Cluster, Health Checks failed"
       end
 
@@ -57,10 +58,21 @@ module UseCase
       delayer.increment_retries
 
       if delayer.max_retries_reached?
+        # Provide reason for failure: raise "X NUMBER OF RETRIES REACHED . Failed because <error message>"
         raise "MAX RETRIES REACHED"
       end
     end
 
     attr_reader :ecs_gateway, :health_checker, :delayer, :cluster_finder, :logger
+
+    def provide_failure_reason
+        # list stopped tasks (cluster name, region)
+
+        # describe stopped task (returns Task object as response)
+
+        # retrieve stoppedReason from response
+
+        # Bonus points: recent PRs
+    end
   end
 end
