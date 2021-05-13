@@ -1,0 +1,33 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "03:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: aws-sdk-route53
+    versions:
+    - 1.45.0
+    - 1.46.0
+    - 1.47.0
+    - 1.48.0
+  - dependency-name: aws-sdk-ecs
+    versions:
+    - 1.73.0
+    - 1.74.0
+    - 1.75.0
+  - dependency-name: pry
+    versions:
+    - 0.14.0
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "03:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: ruby
+    versions:
+    - 3.0.0.pre.alpine
