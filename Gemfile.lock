@@ -18,8 +18,8 @@ GEM
     aws-sdk-ecs (1.80.0)
       aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-route53 (1.44.0)
-      aws-sdk-core (~> 3, >= 3.109.0)
+    aws-sdk-route53 (1.49.0)
+      aws-sdk-core (~> 3, >= 3.112.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.2.3)
       aws-eventstream (~> 1, >= 1.0.2)
@@ -101,8 +101,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-route53 (~> 1.49.0)
   aws-sdk-ecs (~> 1.80.0)
-  aws-sdk-route53 (~> 1.44.0)
   multipart-post (~> 2.1)
   pry
   rake (~> 13.0.1)
