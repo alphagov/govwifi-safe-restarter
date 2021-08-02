@@ -2,7 +2,7 @@ require "logger"
 
 require "require_all"
 require_all "lib"
-logger = Logger.new(STDOUT)
+logger = Logger.new($stdout)
 
 task :safe_restart, :environment do |_, args|
   unless %w[staging production].include?(args["environment"])
