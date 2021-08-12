@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 ruby File.read(".ruby-version").chomp
 
-gem "aws-sdk-ecs", "~> 1.83.0"
+gem "aws-sdk-ecs", "~> 1.84.0"
 gem "aws-sdk-route53", "~> 1.53.0"
 gem "multipart-post", "~> 2.1"
 gem "rake", "~> 13.0.6"
