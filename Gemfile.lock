@@ -15,8 +15,8 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ecs (1.84.0)
-      aws-sdk-core (~> 3, >= 3.119.0)
+    aws-sdk-ecs (1.85.0)
+      aws-sdk-core (~> 3, >= 3.120.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-route53 (1.55.0)
       aws-sdk-core (~> 3, >= 3.120.0)
@@ -101,7 +101,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk-ecs (~> 1.84.0)
+  aws-sdk-ecs (~> 1.85.0)
   aws-sdk-route53 (~> 1.55.0)
   multipart-post (~> 2.1)
   pry
