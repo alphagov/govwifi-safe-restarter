@@ -4,7 +4,6 @@ platform: linux
 inputs:
   - name: src
   - name: docker-cache/app-prebuilt
-  - name: docker-cache/ruby-image
 
 params:
   ON_CONCOURSE: true
