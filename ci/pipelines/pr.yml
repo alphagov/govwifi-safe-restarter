@@ -2,9 +2,6 @@ groups:
 - name: pr
   jobs:
   - lint & test
-- name: self-update
-  jobs:
-  - self-update
 
 resource_types:
 - name: pull-request
@@ -15,11 +12,6 @@ resource_types:
     password: ((docker_hub_authtoken))
 
 resources:
-  - name: govwifi-safe-restarter
-    type: git
-    source:
-      uri: https://github.com/alphagov/govwifi-safe-restarter.git
-
   - name: pull-request
     type: pull-request
     check_every: 1m
@@ -65,14 +57,6 @@ update-status-commands:
       status: success
 
 jobs:
-  - name: self-update
-    serial: true
-    plan:
-    - get: govwifi-safe-restarter
-      trigger: true
-    - set_pipeline: safe-restarter-pr
-      file: govwifi-safe-restarter/ci/pipelines/pr.yml
-
   - name: lint & test
     interruptible: true
     max_in_flight: 1
