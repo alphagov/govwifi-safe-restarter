@@ -3,7 +3,3 @@ version: '3.4'
 services:
   app:
     build: .
-    environment:
-      RACK_ENV: development
-    expose:
-      - "8080"
