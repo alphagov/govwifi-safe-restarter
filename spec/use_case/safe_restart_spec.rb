@@ -59,11 +59,11 @@ describe UseCase::SafeRestart do
 
   subject do
     described_class.new(
-      cluster_finder: cluster_finder,
-      ecs_gateway: ecs_gateway,
-      health_checker: health_checker,
-      delayer: delayer,
-      logger: logger,
+      cluster_finder:,
+      ecs_gateway:,
+      health_checker:,
+      delayer:,
+      logger:,
     )
   end
 

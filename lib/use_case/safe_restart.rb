@@ -43,12 +43,12 @@ module UseCase
     end
 
     def cluster_tasks(cluster)
-      ecs_gateway.list_tasks(cluster: cluster)
+      ecs_gateway.list_tasks(cluster:)
     end
 
     def stop_task(cluster, task)
       p "Stopping task #{task} in cluster #{cluster}"
-      ecs_gateway.stop_task(cluster: cluster, task: task, reason: "AUTOMATED RESTART")
+      ecs_gateway.stop_task(cluster:, task:, reason: "AUTOMATED RESTART")
     end
 
     def wait_or_timeout

@@ -1,5 +1,5 @@
 describe UseCase::FindClustersForEnvironment do
-  subject { described_class.new(gateway: ecs_gateway, environment: environment) }
+  subject { described_class.new(gateway: ecs_gateway, environment:) }
 
   let(:ecs_gateway) do
     double(list_clusters: [

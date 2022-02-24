@@ -6,7 +6,7 @@ module Gateway
       end
 
       def stop_task(cluster:, task:, reason: "AUTOMATED RESTART")
-        client.stop_task(cluster: cluster, task: task, reason: reason)
+        client.stop_task(cluster:, task:, reason:)
       end
 
       def list_clusters
@@ -14,7 +14,7 @@ module Gateway
       end
 
       def list_tasks(cluster:)
-        client.list_tasks(cluster: cluster).task_arns
+        client.list_tasks(cluster:).task_arns
       end
 
     private

@@ -20,7 +20,7 @@ class FakeHealthyRoute53Gateway
       },
     ])
 
-    client.get_health_check_status(health_check_id: health_check_id)
+    client.get_health_check_status(health_check_id:)
   end
 
   def list_health_checks
@@ -73,7 +73,7 @@ class FakeUnHealthyRoute53Gateway
         },
       ])
 
-    client.get_health_check_status(health_check_id: health_check_id)
+    client.get_health_check_status(health_check_id:)
   end
 
   def list_health_checks
@@ -108,7 +108,7 @@ describe UseCase::HealthCheck do
   let(:delayer) { spy("Gateway::Delayer", delay: nil) }
 
   let(:result) do
-    described_class.new(route53_gateway: aws_route53_gateway, delayer: delayer).healthy?
+    described_class.new(route53_gateway: aws_route53_gateway, delayer:).healthy?
   end
 
   context "Given health checkers are healthy" do
@@ -127,7 +127,7 @@ describe UseCase::HealthCheck do
 
   context "given a delayer" do
     it "delays the health checks to avoid throttling" do
-      described_class.new(route53_gateway: FakeHealthyRoute53Gateway.new, delayer: delayer).healthy?
+      described_class.new(route53_gateway: FakeHealthyRoute53Gateway.new, delayer:).healthy?
       expect(delayer).to have_received(:delay).twice.with(wait_time: 5)
     end
   end
