@@ -15,6 +15,8 @@ module UseCase
 
       cluster_finder.execute.each do |cluster|
         rolling_restart_cluster(cluster)
+
+        delayer.reset
       end
     end
 
