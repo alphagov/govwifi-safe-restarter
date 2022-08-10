@@ -21,7 +21,7 @@ module Gateway
       @retries = 0
     end
 
-    MAX_RETRIES = 5
-    DEFAULT_WAIT_TIME = 900 # 900 seconds is 15 mins. Currently docker containers are taking 11+ minutes to spawn
+    MAX_RETRIES = 15
+    DEFAULT_WAIT_TIME = 300 # 5 mins.
   end
 end
