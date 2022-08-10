@@ -16,6 +16,10 @@ class DelayerFake
   def max_retries_reached?
     @retries > health_check_retry_limit
   end
+
+  def reset
+    @retries = 0
+  end
 end
 
 class EventuallyHealthyHealthCheckFake

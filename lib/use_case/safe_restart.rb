@@ -15,6 +15,8 @@ module UseCase
 
       cluster_finder.execute.each do |cluster|
         rolling_restart_cluster(cluster)
+
+        delayer.reset
       end
     end
 
@@ -39,6 +41,10 @@ module UseCase
 
     def restart_and_wait_for(task, original_tasks, cluster)
       stop_task(cluster, task)
+
+      # Give the new task a chance to start before checking the count
+      delayer.delay
+
       wait_or_timeout until original_tasks.count == cluster_tasks(cluster).count
     end
 
