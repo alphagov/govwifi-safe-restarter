@@ -7,10 +7,7 @@ module UseCase
 
     def execute
       ecs_gateway.list_clusters.select do |cluster_arn|
-        # TODO: This can be updated once the migration to Fargate for
-        # Frontend is completed
-        cluster_arn.match?(/#{environment}-frontend/) ||
-          cluster_arn.match?(/frontend-fargate/)
+        cluster_arn.match?(/frontend-fargate/)
       end
     end
 
