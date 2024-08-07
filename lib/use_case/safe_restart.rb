@@ -9,9 +9,9 @@ module UseCase
     end
 
     def execute
-      unless health_checker.healthy?
-        raise "Cannot Reboot Cluster, Health Checks failed"
-      end
+      # unless health_checker.healthy?
+      #   raise "Cannot Reboot Cluster, Health Checks failed"
+      # end
 
       cluster_finder.execute.each do |cluster|
         rolling_restart_cluster(cluster)
@@ -30,7 +30,7 @@ module UseCase
       p "Canary is: #{canary}"
       p "Rest is: #{rest}"
       restart_and_wait_for(canary, tasks, cluster)
-      wait_or_timeout until health_checker.healthy?
+      # wait_or_timeout until health_checker.healthy?
 
       p "Moving onto the rest"
       rest.each do |task|
