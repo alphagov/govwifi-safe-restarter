@@ -3,7 +3,7 @@ ruby File.read(".ruby-version").chomp
 
 gem "aws-sdk-ecs", "~> 1.102.0"
 gem "aws-sdk-route53", "~> 1.70.0"
-gem "multipart-post", "~> 2.2"
+gem "multipart-post", "~> 2.3"
 gem "rake", "~> 13.0.6"
 gem "require_all", "~> 3.0"
 gem "rexml", "~> 3.2"
