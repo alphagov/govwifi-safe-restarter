@@ -1,4 +1,4 @@
-FROM ruby:3.4.8-alpine
+FROM ruby:4.0.6-alpine
 ARG BUNDLE_INSTALL_CMD=bundle
 
 WORKDIR /usr/src/app
